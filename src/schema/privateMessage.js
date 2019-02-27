@@ -5,9 +5,9 @@ const privateMessageSchema = gql`
     privateMessages: [PrivateMessage!]!
   }
 
-  # extend type Mutation {
-
-  # }
+  extend type Mutation {
+    createPrivateMessage(text: String!, receiverId: Int!): PrivateMessage!
+  }
 
   type PrivateMessage {
     id: ID!

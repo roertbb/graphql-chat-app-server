@@ -5,9 +5,10 @@ const userSchema = gql`
     users: [User!]!
   }
 
-  # extend type Mutation {
-
-  # }
+  extend type Mutation {
+    login(nick: String!, password: String!): Token!
+    register(nick: String!, email: String!, password: String!): Token!
+  }
 
   type User {
     id: ID!
@@ -15,6 +16,10 @@ const userSchema = gql`
     email: String!
     role: String
     privateMessages: [PrivateMessage!]!
+  }
+
+  type Token {
+    token: String!
   }
 `;
 

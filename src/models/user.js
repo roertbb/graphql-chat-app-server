@@ -1,3 +1,5 @@
+import { generatePasswordHash } from '../auth';
+
 const user = (sequelize, DataTypes) => {
   const User = sequelize.define('user', {
     nick: {
@@ -60,6 +62,11 @@ const user = (sequelize, DataTypes) => {
       }
     });
   };
+
+  // handle password hashing
+  User.beforeCreate(async user => {
+    user.password = await generatePasswordHash(user.password);
+  });
 
   return User;
 };

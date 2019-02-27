@@ -3,6 +3,7 @@ import { gql } from 'apollo-server';
 const userSchema = gql`
   extend type Query {
     users: [User!]!
+    chattedWith: [User!]!
   }
 
   extend type Mutation {

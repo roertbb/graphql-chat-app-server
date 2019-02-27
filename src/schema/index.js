@@ -3,6 +3,8 @@ import userSchema from './user';
 import privateMessageSchema from './privateMessage';
 
 const linkSchema = gql`
+  scalar Date
+
   type Query {
     _: Boolean
   }

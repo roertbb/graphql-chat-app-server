@@ -1,11 +1,25 @@
 import Sequelize from 'sequelize';
 import { AuthenticationError, UserInputError } from 'apollo-server';
 import { validatePassword, createToken } from '../auth';
+import { sequelize } from '../models';
 
 const userResolver = {
   Query: {
     users: async (parent, agrs, { models }) => {
       return await models.User.findAll({});
+    },
+    chattedWith: async (parent, args, { models, me }) => {
+      console.log(me);
+      const [users, _] = await sequelize.query(
+        'select u.id, u.nick, u.email, u.role from users u join private_messages pm on (u.id = pm.receiver_id or u.id = pm.sender_id) where (pm.receiver_id = :userId or pm.sender_id = :userId)',
+        {
+          replacements: {
+            userId: me.id
+          }
+        }
+      );
+      console.log(users);
+      return users;
     }
   },
   Mutation: {

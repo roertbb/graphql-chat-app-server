@@ -1,10 +1,43 @@
 import { combineResolvers } from 'graphql-resolvers';
 import { isAuthenticatedResolver, isPrivateMessageOwner } from './auth';
+import Sequelize from 'sequelize';
 
 const privateMessageResolver = {
   Query: {
-    privateMessages: async (parent, agrs, { models }) => {
+    privateMessages: async (parent, args, { models }) => {
       return await models.PrivateMessage.findAll({});
+    },
+    myPrivateMessages: async (
+      parent,
+      { otherUserId, cursor, limit },
+      { models, me }
+    ) => {
+      const cursorOptions = cursor
+        ? {
+            where: {
+              [Sequelize.Op.or]: [
+                { senderId: otherUserId, receiverId: me.id },
+                { senderId: me.id, receiverId: otherUserId }
+              ],
+              created_at: {
+                [Sequelize.Op.lt]: cursor
+              }
+            }
+          }
+        : {
+            where: {
+              [Sequelize.Op.or]: [
+                { senderId: otherUserId, receiverId: me.id },
+                { senderId: me.id, receiverId: otherUserId }
+              ]
+            }
+          };
+
+      return await models.PrivateMessage.findAll({
+        order: [['created_at', 'DESC']],
+        limit,
+        ...cursorOptions
+      });
     }
   },
   Mutation: {

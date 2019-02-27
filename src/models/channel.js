@@ -3,11 +3,11 @@ const channel = (sequelize, DataTypes) => {
     name: {
       type: DataTypes.STRING,
       unique: true,
-      validate: { nonEmpty: true }
+      validate: { notEmpty: true }
     },
     private: {
       type: DataTypes.BOOLEAN,
-      validate: { nonEmpty: true }
+      validate: { notEmpty: true }
     }
   });
 
@@ -28,7 +28,7 @@ const channel = (sequelize, DataTypes) => {
     });
     Channel.belongsToMany(models.User, {
       through: {
-        model: models.PrivateMessage
+        model: models.Message
       },
       foreignKey: {
         name: 'channelId',

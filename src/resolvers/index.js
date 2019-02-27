@@ -1,9 +1,4 @@
-const resolver = {
-  Query: {
-    hello: async (parent, agrs, context) => {
-      return 'hello world';
-    }
-  }
-};
+import userResolver from './user';
+import privateMessageResolver from './privateMessage';
 
-export default [resolver];
+export default [userResolver, privateMessageResolver];

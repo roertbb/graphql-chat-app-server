@@ -1,4 +1,4 @@
-import { models, sequelize } from './models';
+import { models, sequelize, initialMigration } from './models';
 import { ApolloServer } from 'apollo-server';
 import resolvers from './resolvers';
 import typeDefs from './schema';
@@ -6,11 +6,15 @@ import typeDefs from './schema';
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  context: {}
+  context: {
+    models
+  }
 });
 
 sequelize.sync({ force: true }).then(async () => {
   // initial migration
+  initialMigration(new Date());
+
   server.listen().then(({ url }) => {
     console.log(`Listening on ${url}`);
   });

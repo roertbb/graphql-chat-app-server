@@ -1,9 +1,10 @@
 import { gql } from 'apollo-server';
+import userSchema from './user';
+import privateMessageSchema from './privateMessage';
 
 const linkSchema = gql`
   type Query {
-    _: String!
-    hello: String!
+    _: Boolean
   }
 
   type Mutation {
@@ -15,4 +16,4 @@ const linkSchema = gql`
   }
 `;
 
-export default [linkSchema];
+export default [linkSchema, userSchema, privateMessageSchema];

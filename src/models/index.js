@@ -30,3 +30,24 @@ Object.keys(models).forEach(key => {
     models[key].associate(models);
   }
 });
+
+export const initialMigration = async date => {
+  await models.User.create({
+    nick: 'test',
+    email: 'test@test.com',
+    password: 'test123',
+    role: 'ADMIN'
+  });
+
+  await models.User.create({
+    nick: 'bob',
+    email: 'bob@bob.com',
+    password: 'awesomebob'
+  });
+
+  await models.PrivateMessage.create({
+    text: 'lorem ipsum',
+    senderId: 1,
+    receiverId: 2
+  });
+};

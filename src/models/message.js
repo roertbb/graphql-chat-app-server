@@ -1,5 +1,5 @@
 const message = (sequelize, DataTypes) => {
-  const Message = sequelize.define('privateMessage', {
+  const Message = sequelize.define('message', {
     text: {
       type: DataTypes.STRING,
       validate: { notEmpty: true }

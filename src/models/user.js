@@ -5,7 +5,7 @@ const user = (sequelize, DataTypes) => {
       unique: true,
       allowNull: false,
       validate: {
-        nonEmpty: true
+        notEmpty: true
       }
     },
     email: {
@@ -13,7 +13,7 @@ const user = (sequelize, DataTypes) => {
       unique: true,
       allowNull: false,
       validate: {
-        nonEmpty: true,
+        notEmpty: true,
         isEmail: true
       }
     },
@@ -28,8 +28,20 @@ const user = (sequelize, DataTypes) => {
   });
 
   User.associate = models => {
-    User.hasMany(models.PrivateMessage, { as: 'senderId' });
-    User.hasMany(models.PrivateMessage, { as: 'receiverId' });
+    User.hasMany(models.PrivateMessage, {
+      as: 'senderId',
+      foreignKey: {
+        name: 'senderId',
+        field: 'sender_id'
+      }
+    });
+    User.hasMany(models.PrivateMessage, {
+      as: 'receiverId',
+      foreignKey: {
+        name: 'receiverId',
+        field: 'receiver_id'
+      }
+    });
 
     User.belongsToMany(models.Channel, {
       through: 'channel_member',
@@ -40,7 +52,7 @@ const user = (sequelize, DataTypes) => {
     });
     User.belongsToMany(models.Channel, {
       through: {
-        model: models.PrivateMessage
+        model: models.Message
       },
       foreignKey: {
         name: 'userId',

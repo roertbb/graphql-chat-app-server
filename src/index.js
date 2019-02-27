@@ -15,7 +15,7 @@ sequelize.sync({ force: true }).then(async () => {
   // initial migration
   initialMigration(new Date());
 
-  server.listen().then(({ url }) => {
+  server.listen({ port: 3000 }).then(({ url }) => {
     console.log(`Listening on ${url}`);
   });
 });

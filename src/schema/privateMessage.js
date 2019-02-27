@@ -7,6 +7,8 @@ const privateMessageSchema = gql`
 
   extend type Mutation {
     createPrivateMessage(text: String!, receiverId: Int!): PrivateMessage!
+    updatePrivateMessage(id: ID!, text: String!): PrivateMessage!
+    deletePrivateMessage(id: ID!): Boolean!
   }
 
   type PrivateMessage {

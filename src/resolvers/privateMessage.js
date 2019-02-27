@@ -1,5 +1,5 @@
 import { combineResolvers } from 'graphql-resolvers';
-import { isAuthenticatedResolver } from './auth';
+import { isAuthenticatedResolver, isPrivateMessageOwner } from './auth';
 
 const privateMessageResolver = {
   Query: {
@@ -20,6 +20,26 @@ const privateMessageResolver = {
         // subscription
 
         return message;
+      }
+    ),
+    updatePrivateMessage: combineResolvers(
+      isAuthenticatedResolver,
+      isPrivateMessageOwner,
+      async (parent, { id, text }, { models }) => {
+        const [_, [message, ...__]] = await models.PrivateMessage.update(
+          { text: text },
+          { where: { id }, returning: true, raw: true }
+        );
+        return message;
+      }
+    ),
+    deletePrivateMessage: combineResolvers(
+      isAuthenticatedResolver,
+      isPrivateMessageOwner,
+      async (parent, { id }, { models }) => {
+        const resp = await models.PrivateMessage.destroy({ where: { id } });
+        console.log(resp);
+        return resp;
       }
     )
   },

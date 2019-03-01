@@ -3,6 +3,9 @@ import { ApolloServer, PubSub } from 'apollo-server';
 import resolvers from './resolvers';
 import typeDefs from './schema';
 import { authorize } from './auth';
+import { batchUsers } from './loaders/user';
+import { batchPrivateMessages } from './loaders/privateMessage';
+import DataLoader from 'dataloader';
 
 const pubsub = new PubSub();
 
@@ -13,7 +16,13 @@ const server = new ApolloServer({
     if (connection) {
       return {
         models,
-        pubsub
+        pubsub,
+        loaders: {
+          user: new DataLoader(keys => batchUsers(keys, models)),
+          privateMessages: new DataLoader(keys =>
+            batchPrivateMessages(keys, models)
+          )
+        }
       };
     }
 
@@ -23,7 +32,13 @@ const server = new ApolloServer({
       return {
         models,
         me,
-        pubsub
+        pubsub,
+        loaders: {
+          user: new DataLoader(keys => batchUsers(keys, models)),
+          privateMessages: new DataLoader(keys =>
+            batchPrivateMessages(keys, models)
+          )
+        }
       };
     }
   }

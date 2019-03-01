@@ -92,11 +92,11 @@ const privateMessageResolver = {
     }
   },
   PrivateMessage: {
-    sender: async ({ senderId }, args, { models }) => {
-      return await models.User.findByPk(senderId);
+    sender: async ({ senderId }, args, { loaders }) => {
+      return await loaders.user.load(senderId);
     },
-    receiver: async ({ receiverId }, args, { models }) => {
-      return await models.User.findByPk(receiverId);
+    receiver: async ({ receiverId }, args, { loaders }) => {
+      return await loaders.user.load(receiverId);
     }
   }
 };

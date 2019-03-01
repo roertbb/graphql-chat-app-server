@@ -1,4 +1,3 @@
-import Sequelize from 'sequelize';
 import { AuthenticationError, UserInputError } from 'apollo-server';
 import { validatePassword, createToken } from '../auth';
 import { sequelize } from '../models';
@@ -38,12 +37,8 @@ const userResolver = {
     }
   },
   User: {
-    privateMessages: async ({ id }, args, { models }) => {
-      return await models.PrivateMessage.findAll({
-        where: {
-          [Sequelize.Op.or]: [{ senderId: id }, { receiverId: id }]
-        }
-      });
+    privateMessages: async ({ id }, args, { loaders }) => {
+      return await loaders.privateMessages.load(id);
     }
   }
 };

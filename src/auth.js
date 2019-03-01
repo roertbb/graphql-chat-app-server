@@ -18,7 +18,8 @@ export const validatePassword = async (enteredPassword, savedPassword) => {
 };
 
 export const authorize = async req => {
-  const token = req.headers['x-token'];
+  const token =
+    req.headers['x-token'] && req.headers['x-token'].replace('Bearer ', '');
   if (token) {
     try {
       return await jwt.verify(token, SECRET);

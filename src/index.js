@@ -47,7 +47,7 @@ const server = new ApolloServer({
 sequelize.sync({ force: true }).then(async () => {
   initialMigration(new Date());
 
-  server.listen({ port: 3000 }).then(({ url }) => {
+  server.listen().then(({ url }) => {
     console.log(`Listening on ${url}`);
   });
 });

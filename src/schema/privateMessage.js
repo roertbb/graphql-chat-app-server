@@ -16,6 +16,10 @@ const privateMessageSchema = gql`
     deletePrivateMessage(id: ID!): Boolean!
   }
 
+  extend type Subscription {
+    newMessage(receiverId: Int!): PrivateMessage!
+  }
+
   type PrivateMessage {
     id: ID!
     sender: User!
@@ -26,3 +30,5 @@ const privateMessageSchema = gql`
 `;
 
 export default privateMessageSchema;
+
+export const NEW_MESSAGE = 'NEW_MESSAGE';

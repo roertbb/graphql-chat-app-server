@@ -9,7 +9,6 @@ const userResolver = {
       return await models.User.findAll({});
     },
     chattedWith: async (parent, args, { models, me }) => {
-      console.log(me);
       const [users, _] = await sequelize.query(
         'select u.id, u.nick, u.email, u.role from users u join private_messages pm on (u.id = pm.receiver_id or u.id = pm.sender_id) where (pm.receiver_id = :userId or pm.sender_id = :userId)',
         {
@@ -18,7 +17,6 @@ const userResolver = {
           }
         }
       );
-      console.log(users);
       return users;
     }
   },

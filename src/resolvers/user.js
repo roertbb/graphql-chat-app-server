@@ -9,7 +9,7 @@ const userResolver = {
     },
     chattedWith: async (parent, args, { models, me }) => {
       const [users, _] = await sequelize.query(
-        'select u.id, u.nick, u.email, u.role from users u join private_messages pm on (u.id = pm.receiver_id or u.id = pm.sender_id) where (pm.receiver_id = :userId or pm.sender_id = :userId)',
+        'select distinct u.id, u.nick, u.email, u.role from users u join private_messages pm on (u.id = pm.receiver_id or u.id = pm.sender_id) where (pm.receiver_id = :userId or pm.sender_id = :userId)',
         {
           replacements: {
             userId: me.id

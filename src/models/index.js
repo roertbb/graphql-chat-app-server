@@ -50,4 +50,16 @@ export const initialMigration = async date => {
     senderId: 1,
     receiverId: 2
   });
+
+  await models.PrivateMessage.create({
+    text: 'second message',
+    senderId: 2,
+    receiverId: 1
+  });
+  await models.PrivateMessage.create({
+    text:
+      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero modi quibusdam minus aspernatur perferendis accusamus sapiente repellat, deserunt ad voluptates, praesentium voluptatem blanditiis excepturi.',
+    senderId: 1,
+    receiverId: 2
+  });
 };

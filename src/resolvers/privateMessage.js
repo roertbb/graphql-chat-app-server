@@ -36,7 +36,7 @@ const privateMessageResolver = {
           };
 
       return await models.PrivateMessage.findAll({
-        order: [['created_at', 'DESC']],
+        order: [['created_at', 'ASC']],
         limit,
         ...cursorOptions
       });
@@ -84,9 +84,7 @@ const privateMessageResolver = {
       subscribe: withFilter(
         (parent, args, { pubsub }) => pubsub.asyncIterator(NEW_MESSAGE),
         (payload, variables) => {
-          return (
-            payload.newMessage.dataValues.receiverId === variables.receiverId
-          );
+          return payload.newMessage.dataValues.senderId === variables.senderId;
         }
       )
     }

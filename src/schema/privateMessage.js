@@ -17,7 +17,7 @@ const privateMessageSchema = gql`
   }
 
   extend type Subscription {
-    newMessage(receiverId: Int!): PrivateMessage!
+    newMessage(senderId: Int!): PrivateMessage!
   }
 
   type PrivateMessage {

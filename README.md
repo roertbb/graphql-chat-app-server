@@ -1,4 +1,1 @@
-# TODOS
-
-- dataloader
-- subscription
+# GraphQL Chat App Server

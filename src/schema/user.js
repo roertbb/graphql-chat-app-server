@@ -21,6 +21,7 @@ const userSchema = gql`
 
   type Token {
     token: String!
+    refreshToken: String!
   }
 `;
 

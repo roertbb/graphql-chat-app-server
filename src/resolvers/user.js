@@ -1,5 +1,5 @@
 import { AuthenticationError, UserInputError } from 'apollo-server';
-import { validatePassword, createToken } from '../auth';
+import { validatePassword, createTokens } from '../auth';
 import { sequelize } from '../models';
 
 const userResolver = {
@@ -9,7 +9,7 @@ const userResolver = {
     },
     chattedWith: async (parent, args, { models, me }) => {
       const [users, _] = await sequelize.query(
-        'select distinct u.id, u.nick, u.email, u.role from users u join private_messages pm on (u.id = pm.receiver_id or u.id = pm.sender_id) where (pm.receiver_id = :userId or pm.sender_id = :userId)',
+        `select distinct u.id, u.nick, u.email, u.role from users u join private_messages pm on (u.id = pm.receiver_id or u.id = pm.sender_id) where (pm.receiver_id = :userId or pm.sender_id = :userId) except select u2.id, u2.nick, u2.email, u2.role from users u2 where id = :userId`,
         {
           replacements: {
             userId: me.id
@@ -28,12 +28,14 @@ const userResolver = {
       const isValid = await validatePassword(password, user.password);
       if (!isValid) throw new AuthenticationError('Invalid password');
 
-      return { token: createToken(user, '30m') };
+      const { token, refreshToken } = await createTokens(user, '1d', '7d');
+      return { token, refreshToken };
     },
     register: async (parent, { nick, email, password }, { models }) => {
       const user = await models.User.create({ nick, email, password });
 
-      return { token: createToken(user, '30m') };
+      const { token, refreshToken } = await createTokens(user, '1d', '7d');
+      return { token, refreshToken };
     }
   },
   User: {

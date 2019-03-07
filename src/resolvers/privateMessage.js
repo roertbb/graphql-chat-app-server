@@ -1,7 +1,7 @@
 import { combineResolvers } from 'graphql-resolvers';
 import { isAuthenticatedResolver, isPrivateMessageOwner } from './auth';
 import Sequelize from 'sequelize';
-import { NEW_MESSAGE } from '../schema/privateMessage';
+import { NEW_MESSAGE, NEW_DIRECT_MESSAGE } from '../schema/privateMessage';
 import { withFilter } from 'graphql-subscriptions';
 
 const privateMessageResolver = {
@@ -56,6 +56,10 @@ const privateMessageResolver = {
           newMessage: message
         });
 
+        pubsub.publish(NEW_DIRECT_MESSAGE, {
+          newDirectMessage: message
+        });
+
         return message;
       }
     ),
@@ -82,9 +86,19 @@ const privateMessageResolver = {
   Subscription: {
     newMessage: {
       subscribe: withFilter(
-        (parent, args, { pubsub }) => pubsub.asyncIterator(NEW_MESSAGE),
+        (parent, args, { pubsub, onConnect }) =>
+          pubsub.asyncIterator(NEW_MESSAGE),
         (payload, variables) => {
           return payload.newMessage.dataValues.senderId === variables.senderId;
+        }
+      )
+    },
+    newDirectMessage: {
+      subscribe: withFilter(
+        (parent, args, { pubsub, me }) =>
+          pubsub.asyncIterator(NEW_DIRECT_MESSAGE),
+        (payload, variables, { me }) => {
+          return payload.newDirectMessage.dataValues.receiverId === me.id;
         }
       )
     }

@@ -24,6 +24,14 @@ export const validatePassword = async (enteredPassword, savedPassword) => {
   return await bcrypt.compare(enteredPassword, savedPassword);
 };
 
+export const authorizeWs = async token => {
+  try {
+    return await jwt.verify(token, SECRET);
+  } catch (error) {
+    throw new AuthenticationError('Your session expired. Sign in again');
+  }
+};
+
 export const authorize = async (req, res) => {
   const token =
     req.headers['x-token'] && req.headers['x-token'].replace('Bearer ', '');

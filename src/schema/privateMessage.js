@@ -18,6 +18,7 @@ const privateMessageSchema = gql`
 
   extend type Subscription {
     newMessage(senderId: Int!): PrivateMessage!
+    newDirectMessage: PrivateMessage!
   }
 
   type PrivateMessage {
@@ -32,3 +33,4 @@ const privateMessageSchema = gql`
 export default privateMessageSchema;
 
 export const NEW_MESSAGE = 'NEW_MESSAGE';
+export const NEW_DIRECT_MESSAGE = 'NEW_DIRECT_MESSAGE';

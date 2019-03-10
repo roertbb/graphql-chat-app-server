@@ -33,8 +33,7 @@ export const authorizeWs = async token => {
 };
 
 export const authorize = async (req, res) => {
-  const token =
-    req.headers['x-token'] && req.headers['x-token'].replace('Bearer ', '');
+  const token = req.headers['x-token'] && req.headers['x-token'];
   if (token) {
     try {
       return await jwt.verify(token, SECRET);

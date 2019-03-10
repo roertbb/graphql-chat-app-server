@@ -25,6 +25,7 @@ const server = new ApolloServer({
   context: async ({ req, connection }) => {
     if (connection) {
       const { me } = connection.context;
+
       return {
         me,
         models,

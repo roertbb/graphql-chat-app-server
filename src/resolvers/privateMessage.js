@@ -88,8 +88,11 @@ const privateMessageResolver = {
       subscribe: withFilter(
         (parent, args, { pubsub, onConnect }) =>
           pubsub.asyncIterator(NEW_MESSAGE),
-        (payload, variables) => {
-          return payload.newMessage.dataValues.senderId === variables.senderId;
+        (payload, variables, { me }) => {
+          return (
+            payload.newMessage.dataValues.receiverId === me.id &&
+            payload.newMessage.dataValues.senderId === variables.senderId
+          );
         }
       )
     },

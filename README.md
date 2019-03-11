@@ -2,6 +2,11 @@
 
 Basic real-time chat app using GraphQL client - Apollo
 
+## Technologies
+
+- Apollo Server
+- Sequelize
+
 ## Features
 
 - user management - login/register
